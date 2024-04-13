@@ -1,0 +1,21 @@
+---
+- name: Install Nginx and Apache2 
+  hosts: localhost
+  connection: local
+
+  vars:
+    my_var: This is a var
+
+  tasks:
+    - name: install nginx
+      apt:
+        name: nginx
+        state: latest
+    - name: install apache2
+      apt:
+        name: apache2
+        state: latest
+    - name: print variable my_var
+      debug:
+        msg: "{{ my_var }}"
+    
