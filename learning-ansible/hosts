@@ -1,0 +1,10 @@
+[localhost]
+local
+
+[aws_servers]
+server1 ansible_ssh_host=172.31.89.21
+server2 ansible_ssh_host=172.31.94.105
+
+[webservers]
+server1
+server2

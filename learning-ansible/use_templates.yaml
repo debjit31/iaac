@@ -1,0 +1,26 @@
+---
+- name: Templates in Ansible
+  hosts: localhost
+  connection: local
+  become: yes
+
+
+  vars:
+    webserver_message: THIS IS A CUSTOM  MESSAGE SET FROM WITHIN THE PLAYBOOK
+    name: Sanchita
+
+  tasks:
+    - name: Install Apache2
+      apt:
+        name: apache2
+        state: present
+
+    - name: Start Apache2 Server
+      service:
+        name: apache2
+        state: started
+
+    - name: Create Index.html using jinja2
+      template:
+        src: jinja2.j2
+        dest: /var/www/html/index.html

@@ -1,0 +1,21 @@
+---
+- name: Loops in Ansible
+  hosts: localhost
+  connection: local
+
+  vars:
+    packages: [apache2, git, nginx]
+    names:
+      - abc
+      - def
+      - ghi
+
+  tasks:
+    - name: Install Packages in Loop
+      apt: 
+        name: "{{ packages }}"
+        state: present
+    - name: Printing in loop
+      debug:
+        msg: "{{ item }}"
+      loop: "{{ names }}"

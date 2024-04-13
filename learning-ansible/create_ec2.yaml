@@ -1,0 +1,57 @@
+---
+- name: Automating EC2 Creation using Ansible
+  hosts: localhost
+  connection: local
+  gather_facts: False
+  tags: provisioning
+
+  vars:
+    keypair: ansible-created-key
+    instance_type: t2.micro
+    instance_name: test-ec2-instance-final
+    image: ami-07d9b9ddc6cd8dd30
+    wait: yes
+    group: webserver
+    region: us-east-1
+    security_group: my-ansible-security-grp
+
+  tasks:
+  - name: Create a new EC2 key pair, returns generated private key
+    ec2_key:
+        name: "{{ keypair }}"
+        region: "{{ region }}"
+      
+  - name: configuring security group for the instance
+    ec2_group:
+        name: "{{ security_group }}"
+        description: my-jenkins-security_group
+        region: "{{ region }}"
+        rules:
+            - proto: tcp
+              from_port: 22
+              to_port: 22
+              cidr_ip: 0.0.0.0/0
+            - proto: tcp
+              from_port: 80
+              to_port: 80
+              cidr_ip: 0.0.0.0/0
+            - proto: tcp
+              from_port: 443
+              to_port: 443
+              cidr_ip: 0.0.0.0/0
+        rules_egress:
+            - proto: all
+              cidr_ip: 0.0.0.0/0
+  - name: creating ec2 instance
+    ec2_instance:
+        security_group: "{{ security_group }}"
+        name: "{{ instance_name }}"
+        key_name: "{{ keypair }}"
+        instance_type: "{{ instance_type}}"
+        image_id: "{{ image }}"
+        region: "{{ region }}"
+        wait_timeout: 3
+        volumes:
+            - device_name: /dev/sda1
+              ebs:
+                volume_size: 30

@@ -1,0 +1,44 @@
+---
+- name: Install 
+  hosts: localhost
+  connection: local
+  become: yes
+
+  vars:
+    myvar: THIS IS A VARIABLE
+
+
+  tasks:
+    - name: Print
+      debug:
+        var: myvar
+    - name: Check if sample.txt exists
+      stat:
+        path: /home/ubuntu/playbooks/sample.txt
+      register: file_status
+
+    - name: Copy File 
+      copy:
+        src: /home/ubuntu/playbooks/sample.txt
+        dest: /etc/ansible/sample.txt
+      when: file_status.stat.exists
+
+    - name : Create a directory
+      file:
+        path: /home/ubuntu/playbooks/testdir 
+        state: directory
+    - name: Install apache2 
+      apt:
+        name: apache2
+        state: latest
+    - name: Install Nginx
+      apt:
+        name: nginx
+        state: latest
+      tags: install_nginx
+
+    - name: Start Nginx Server
+      service:
+        name: nginx
+        state: started
+      tags: start_nginx

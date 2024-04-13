@@ -1,0 +1,39 @@
+---
+- name : for practice
+  hosts:  localhost
+  connection: local
+
+  vars:
+    varname: ansible
+    packages: [apache2,nginx,git]
+    list:
+      - fruit
+      - flower
+      - animal
+
+  tasks:
+    - name: print
+      debug:
+        var: varname
+
+    - name: file creation
+      file:
+        path: /home/ubuntu/playbooks/new.txt
+        state: touch
+      tags: filecreate
+    - name: display newfile content
+      command: cat new.txt chdir=/home/ubuntu/playbooks
+      register: storingvar
+      tags: toviewfile
+    - name: display in console
+      debug:
+        msg: "{{ storingvar.stdout }}"
+      tags: displayonscreen
+    - name: Loops
+      apt:
+        name: "{{packages}}"
+        state:  present
+    - name: print loop
+      debug:
+        msg: "{{item}}"
+      loop: "{{list}}"

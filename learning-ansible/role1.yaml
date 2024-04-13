@@ -1,0 +1,10 @@
+---
+- name: Invoking MyRole1
+  hosts: localhost
+  connection: local
+
+  vars:
+    myvar: THIS IS A VARIABLE FROM THE PLAYBOOK
+
+  roles:
+    - myrole1

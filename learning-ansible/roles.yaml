@@ -1,0 +1,8 @@
+---
+- name: Ansible variables with roles
+  become: yes
+  hosts: localhost
+  connection: local 
+
+  roles: 
+    - sanchita_role

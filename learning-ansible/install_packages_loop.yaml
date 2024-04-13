@@ -1,0 +1,20 @@
+---
+- name: Install Packages
+  hosts: aws_servers
+  connection: local
+  become: yes
+
+  vars: 
+    packages: [apache2, nginx]
+
+  tasks:
+    - name: Install Packages
+      apt:
+        name: "{{ packages }}"
+        state: latest
+        update_cache: yes
+
+    - name: Create a directory in home/ubuntu
+      file:
+        path: /home/ubuntu/testdir
+        state: directory
